@@ -58,13 +58,13 @@ func run(job int, jobTimeOut time.Duration) int {
 	case r := <-rChan:
 		return r
 	case <-time.After(jobTimeOut):
-		close(rChan)
 		log.Printf("Downstream timeout for job: %v", job)
 		return 0
 	}
 }
 
 func callDownstream(job int, rChan chan int) {
-	time.Sleep(time.Duration(rand.Intn(10)) * time.Second)
+	rand.Seed(time.Now().UnixNano())
+	time.Sleep(time.Duration(rand.Intn(4)) * time.Second)
 	rChan <- job
 }
