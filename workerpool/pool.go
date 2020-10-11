@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"math/rand"
 	"time"
 )
 
@@ -22,6 +23,7 @@ func main() {
 		inputChan <- job
 	}
 
+	// getting results
 	for i := 1; i <= len(jobs); i++ {
 		result := <-outputChan
 		jobResults = append(jobResults, result)
@@ -37,16 +39,19 @@ func main() {
 
 func initaiatePool(workers int, requestChannel chan int, reponseChannel chan int) {
 	for i := 1; i <= workers; i++ {
-		go func(workerID int) {
-			for job := range requestChannel {
-				log.Printf("worker %v processing job %v", workerID, job)
-				reponseChannel <- runJob(job)
-			}
-		}(i)
+		go worker(i, requestChannel, reponseChannel)
 	}
 }
 
-func runJob(j int) int {
-	time.Sleep(1 * time.Second)
-	return j
+func worker(workerID int, requestChannel chan int, reponseChannel chan int) {
+	for job := range requestChannel {
+		log.Printf("worker %v processing job %v", workerID, job)
+		reponseChannel <- run(job)
+	}
+}
+
+func run(job int) int {
+	// job impl
+	time.Sleep(time.Duration(rand.Intn(10)) * time.Second)
+	return job
 }
