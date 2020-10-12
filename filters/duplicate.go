@@ -68,7 +68,7 @@ func dedupInts(values []int) []int {
 
 	}
 
-	log.Printf("------------------------------------------- Duplicates map[value]index: %v", duplicatedValueKeyMap)
+	log.Printf("------------------------------------------- Duplicates map[value][]index: %v", duplicatedValueKeyMap)
 
 	return uniqueValues
 }
