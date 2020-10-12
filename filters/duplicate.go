@@ -47,14 +47,27 @@ func dedupInts(values []int) []int {
 	}
 
 	uniqueValueKeyMap := make(map[int]int)
+	duplicatedValueKeyMap := make(map[int][]int)
 	var uniqueValues []int
 
 	for i, v := range values {
 		if _, ok := uniqueValueKeyMap[v]; !ok {
 			uniqueValues = append(uniqueValues, v)
 			uniqueValueKeyMap[v] = i
+			continue
 		}
+		dupVal, okey := duplicatedValueKeyMap[v]
+
+		if !okey {
+			duplicatedValueKeyMap[v] = []int{i}
+			continue
+		}
+
+		duplicatedValueKeyMap[v] = append(dupVal, i)
+
 	}
+
+	log.Printf("------------------------------------------------ Duplicates: %v", duplicatedValueKeyMap)
 
 	return uniqueValues
 }
